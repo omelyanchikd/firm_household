@@ -1,0 +1,55 @@
+#pragma once
+
+
+
+#include "firm.h"
+#include "household.h"
+
+#include "market.h"
+#include "labormarket.h"
+
+#include <vector>
+#include <map>
+#include <fstream>
+
+using namespace std;
+
+class world
+{
+public:
+	world(void);
+	world(int number_firm, int number_household, float money_household);
+
+	void step();
+	void change_tax(float new_tax);
+
+	void init(float money, float labor_productivity, float salary_coefficient); 
+
+	vector<firm*> get_firms();
+
+
+private:
+
+	vector<firm*> firms;
+	vector<household*> households;
+
+	labormarket *labor_market;
+
+	market *good_market;
+
+	float tax;
+	float total_taxes;
+
+	void get_profits();
+	void get_profits(string type);
+
+	void taxation();
+	
+	void write_log();
+	void write_log(string type);
+
+	void learn();
+	void learn(string type);
+};
+
+
