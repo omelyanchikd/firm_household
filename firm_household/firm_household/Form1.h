@@ -486,6 +486,15 @@ private: System::Windows::Forms::Label^  label4;
 				 }
 				 else
 					 values = country->get_firms();
+				 for (int i = 0; i < parameters->CheckedItems->Count; i++)
+				 {
+					for (int j = 0; j < values.size(); j++)
+					{						
+						
+						result->chart->Series->Add(parameters->CheckedItems[i]->ToString() + "_firm_" + j);
+						result->chart->Series[parameters->CheckedItems[i]->ToString() + "_firm_" + j]->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
+					}
+				 }
 				 for (int l = 0; l < int::Parse(iterations->Text); l++)
 				 {
 					 country->step();
@@ -494,7 +503,7 @@ private: System::Windows::Forms::Label^  label4;
 						 for (int j = 0; j < values.size(); j++)
 						 {
 							 string value = msclr::interop::marshal_as<std::string>(parameters->CheckedItems[i]->ToString());
-							 result->chart->Series[parameters->CheckedItems[i]->ToString() + " " + j]->Points->AddY(values[j]->get(value));
+							 result->chart->Series[parameters->CheckedItems[i]->ToString() + "_firm_" + j]->Points->AddY(values[j]->get(value));
 						 }
 					 }
 				 }
