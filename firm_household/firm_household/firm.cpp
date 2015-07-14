@@ -2,15 +2,12 @@
 #include "firm.h"
 
 
-firm::firm(void)
-{
-}
 
-firm::firm(string firm_type)
+firm::firm(void)
 {
 	ofstream fout;
 	fout.open("log.csv", ios::out | ios::trunc);
-	fout<<"pointer, money, price, salary, sales, production, storage, workers, labor_capacity, plan, profit, time"<<endl; 
+	fout<<"pointer"<<", "<<"money"<<", "<<"price"<<", "<<"salary"<<", "<<"sales"<<", "<<"production"<<", "<<"storage"<<", "<<"workers"<<", "<<"labor_capacity"<<", "<<"plan"<<", "<<"profit"<<", "<<"time"<<endl; 
 	fout.close();	
 	sales = 0;
 	sold = 0;
@@ -26,6 +23,7 @@ firm::firm(string firm_type)
 	labor_productivity = 10;
 	salary_budget = 50;
 	plan = 50;
+	price_coefficient = 1;
 }
 
 void firm::init(float _money, float _labor_productivity, float _salary_coefficient, float _salary_budget)
@@ -109,8 +107,13 @@ void firm::set_vacancies()
 	labor_capacity = ceil(plan/labor_productivity);
 	if (labor_capacity)
 		salary = salary_budget/labor_capacity;
-	else
+	else	
 		salary = 0;
+	if (salary <= 0.001)
+	{
+		labor_capacity = 0;
+		salary = 0;
+	}
 	if (labor_capacity < workers.size())
 		fire();
 }
@@ -129,7 +132,14 @@ void firm::produce()
 
 float firm::pricing()
 {
-	return (production > 0)? 1.5 * salary/labor_productivity: price;
+	if (profit > 0)
+		price_coefficient *= 1.1;
+	else
+		if (profit < 0)
+			price_coefficient *= 0.9;
+	price_coefficient = (price_coefficient < 1)? 1: price_coefficient;
+
+	return (production > 0)? price_coefficient * salary/labor_productivity: price;
 }
 
 void firm::get_profits()
@@ -166,8 +176,11 @@ void firm::learn()
 				plan_coefficient = 0.9;	
 			else
 				plan_coefficient = 1;
-		prev_plan = plan;
-		plan = plan_coefficient* plan;
+		prev_plan = plan;//*/
+		if (sold == prev_sold && sold == production && production < plan)
+			plan = sold;
+		else
+			plan = plan_coefficient* plan;
 		salary_budget = salary_coefficient * sales;
 	}
 	time++;

@@ -32,7 +32,7 @@ void household::decide()
 		consumption_budget = money - 0.8 * (money - 0.6 * salary);
 	else
 		consumption_budget = money;//*/
-	consumption_budget = 2 * salary;
+	consumption_budget = salary;
 	//consumption_budget = 20;
 	consumption = 0;
 	consumption_capacity = 5;
@@ -63,7 +63,7 @@ firm* household::buy(map<firm*, float> probabilities)
 
 firm* household::buy(float &capacity, float &consumption, float &budget, map<firm*, float> probabilities)
 {
-	if (consumption == capacity)// || budget == 0)
+	if (consumption == capacity || budget == 0)
 	//if (consumption == need)
 	//if (budget == 0)
 		return NULL;
@@ -71,20 +71,20 @@ firm* household::buy(float &capacity, float &consumption, float &budget, map<fir
 	float quantity = seller->get_storage();
 	float price = seller->get_price();
 	float need = capacity - consumption;
-	if (need <= quantity )//&& budget >= need * price)
+	if (need <= quantity && budget >= need * price)
 	{
 		budget -= need * price;
 		seller->sell(need);
 		consumption += need - consumption;
 	}
 	else
-		if (need > quantity)// && budget >= quantity * price)
+		if (need > quantity && budget >= quantity * price)
 		{
 			budget -= quantity * price;
 			seller->sell(quantity);
 			consumption += quantity;
 		}
-/*		else
+		else
 		{
 			consumption += budget/price;
 			seller->sell(budget/price);

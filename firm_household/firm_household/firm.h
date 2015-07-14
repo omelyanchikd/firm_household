@@ -20,7 +20,6 @@ class firm
 public:
 	
 	firm(void);
-	firm(string firm_type);
 
 	void init(float _money, float _labor_productivity, float _salary_coefficient, float _salary_budget);
 
@@ -76,6 +75,8 @@ private:
 
 	float time;
 	vector<float> history;
+
+	float price_coefficient;
 
 	float salary_coefficient;
 

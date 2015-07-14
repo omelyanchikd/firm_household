@@ -333,7 +333,7 @@ private: System::Windows::Forms::Label^  label4;
 			this->iterations->Name = L"iterations";
 			this->iterations->Size = System::Drawing::Size(75, 20);
 			this->iterations->TabIndex = 26;
-			this->iterations->Text = L"100";
+			this->iterations->Text = L"150";
 			// 
 			// salary_coefficient
 			// 
@@ -357,7 +357,7 @@ private: System::Windows::Forms::Label^  label4;
 			this->number_household->Name = L"number_household";
 			this->number_household->Size = System::Drawing::Size(143, 20);
 			this->number_household->TabIndex = 36;
-			this->number_household->Text = L"10";
+			this->number_household->Text = L"200";
 			// 
 			// labor_productivity
 			// 
