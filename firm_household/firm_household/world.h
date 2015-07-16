@@ -19,6 +19,7 @@ class world
 public:
 	world(void);
 	world(int number_firm, int number_household, float money_household);
+	//world(int number_firm, int number_household, float money_household, float tax_rate);
 
 	void step();
 	void change_tax(float new_tax);

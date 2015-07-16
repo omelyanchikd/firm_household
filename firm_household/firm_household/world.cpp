@@ -52,7 +52,7 @@ void world::step()
 	good_market->match();
 	get_profits();
 	write_log();
-//	taxation();
+	taxation();
 
 
 }

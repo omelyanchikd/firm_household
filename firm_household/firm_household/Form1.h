@@ -507,10 +507,10 @@ private: System::Windows::Forms::Label^  label4;
 						 }
 					 }
 				 }
-//				 Ukraine.change_tax(0.1);
-/*				 for (int i = 0; i < 200; i++)
+				 country->change_tax(0.3);
+				 for (int i = 0; i < 200; i++)
 				 {
-					 Ukraine.step();
+					 country->step();
 				 }//*/
 				 result->Show();
 			 }

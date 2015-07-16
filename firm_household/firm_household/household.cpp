@@ -32,10 +32,13 @@ void household::decide()
 		consumption_budget = money - 0.8 * (money - 0.6 * salary);
 	else
 		consumption_budget = money;//*/
-	consumption_budget = salary;
+	if (employed)
+		consumption_budget = 0.8 * salary;
+	else
+		consumption_budget = 1;
 	//consumption_budget = 20;
 	consumption = 0;
-	consumption_capacity = 5;
+	consumption_capacity = 2;
 }
 
 firm* household::find_work(map<firm*, float> probabilities)

@@ -87,6 +87,7 @@ private:
 
 	float prev_sold;
 	float prev_plan;
+	float prev_price;
 
 	float sales;
 	float profit;

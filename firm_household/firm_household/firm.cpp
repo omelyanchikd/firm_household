@@ -24,6 +24,7 @@ firm::firm(void)
 	salary_budget = 50;
 	plan = 50;
 	price_coefficient = 1;
+	prev_price = 0;
 }
 
 void firm::init(float _money, float _labor_productivity, float _salary_coefficient, float _salary_budget)
@@ -132,14 +133,7 @@ void firm::produce()
 
 float firm::pricing()
 {
-	if (profit > 0)
-		price_coefficient *= 1.1;
-	else
-		if (profit < 0)
-			price_coefficient *= 0.9;
-	price_coefficient = (price_coefficient < 1)? 1: price_coefficient;
-
-	return (production > 0)? price_coefficient * salary/labor_productivity: price;
+	return (salary/labor_productivity > price_coefficient * price)? 1.5 * salary/labor_productivity: price_coefficient * price;
 }
 
 void firm::get_profits()
@@ -169,20 +163,53 @@ void firm::learn()
 {	
 	if (time)
 	{		
-		if (sold >= prev_sold && sold >= production && production >= 0.99 * plan)
+	/*	if (sold >= prev_sold && sold >= production && production >= 0.99 * plan)
 			plan_coefficient = 1.1;
 		else
 			if (sold < prev_sold && sold < production)
 				plan_coefficient = 0.9;	
 			else
 				plan_coefficient = 1;
-		prev_plan = plan;//*/
 		if (sold == prev_sold && sold == production && production < plan)
 			plan = sold;
 		else
 			plan = plan_coefficient* plan;
 		salary_budget = salary_coefficient * sales;
+		if (profit > 0 && sold >= prev_sold)
+			price_coefficient = 1.1;
+		else
+			if (profit < 0)
+				price_coefficient = 0.9;
+			else 
+				price_coefficient = 1;//*/
+		if (sold >= plan)
+		{
+			plan_coefficient = 1.1;
+			price_coefficient = 1.1;
+		}
+		else
+		{
+			if (sold < production)
+			{
+				if (prev_price < price)
+				{
+					price_coefficient = 0.9;
+					plan_coefficient = 1;
+				}
+				else
+				{
+					price_coefficient = 1;
+					plan_coefficient = 0.9;
+				}
+			}
+			else
+				plan_coefficient = sold/plan;
+		}
+		plan = (sold > 0)?plan_coefficient * sold: plan;
+		prev_price = price;
+		price = price_coefficient * price;
 	}
+	salary_budget = (sales > 0)? salary_coefficient * sales : salary_budget;
 	time++;
 	money += profit;
 	prev_sold = sold;
