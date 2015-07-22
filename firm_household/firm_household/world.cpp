@@ -52,9 +52,19 @@ void world::step()
 	good_market->match();
 	get_profits();
 	write_log();
-	taxation();
+//	taxation();
+}
 
-
+void world::step(float pl, float pr)
+{
+	learn(pl, pr);
+	labor_market->activate();
+	labor_market->match();	
+	good_market->activate();
+	good_market->match();
+	get_profits();
+	write_log();
+//	taxation();
 }
 
 void world::change_tax(float new_tax)
@@ -90,6 +100,12 @@ void world::learn()
 {
 	for (int i = 0; i < firms.size(); i++)
 		firms[i]->learn();
+}
+
+void world::learn(float pl, float pr)
+{
+	for (int i = 0; i < firms.size(); i++)
+		firms[i]->learn(pl, pr);
 }
 
 vector<firm*> world::get_firms()

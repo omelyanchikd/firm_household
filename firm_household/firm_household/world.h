@@ -22,6 +22,8 @@ public:
 	//world(int number_firm, int number_household, float money_household, float tax_rate);
 
 	void step();
+	void step(float pl, float pr);
+
 	void change_tax(float new_tax);
 
 	void init(float money, float labor_productivity, float salary_coefficient); 
@@ -42,15 +44,16 @@ private:
 	float total_taxes;
 
 	void get_profits();
-	void get_profits(string type);
+	//void get_profits(string type);
 
 	void taxation();
 	
 	void write_log();
-	void write_log(string type);
+	//void write_log(string type);
 
 	void learn();
-	void learn(string type);
+	void learn(float pl, float pr);
+	//void learn(string type);
 };
 
 

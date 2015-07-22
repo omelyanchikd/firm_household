@@ -159,9 +159,29 @@ void firm::write_log()
 	fout.close();
 }
 
+void firm::learn(float pl, float pr)
+{
+	plan = pl;
+	price = pr;
+	salary_budget = (sales > 0)? salary_coefficient * sales : salary_budget;
+	time++;
+	money += profit;
+	sold = 0;
+	sales = 0;
+
+	if (plan - storage > 0)
+	{
+		plan -= storage;
+	}
+	else
+	{
+		plan = 0;
+	}//*/
+}
+
 void firm::learn()
 {	
-	if (time)
+	if (time > 1)
 	{		
 	/*	if (sold >= prev_sold && sold >= production && production >= 0.99 * plan)
 			plan_coefficient = 1.1;
@@ -182,30 +202,64 @@ void firm::learn()
 				price_coefficient = 0.9;
 			else 
 				price_coefficient = 1;//*/
-		if (sold >= plan)
+		if (sold >= production)
 		{
-			plan_coefficient = 1.1;
-			price_coefficient = 1.1;
+			if (sold > prev_sold)
+			{
+				plan_coefficient = 1.1;
+				price_coefficient = 1.1;
+			}
+			else
+			{
+				plan_coefficient = 1;
+				price_coefficient = 1;
+			}
 		}
 		else
 		{
-			if (sold < production)
+			if (sold >= plan)
 			{
-				if (prev_price < price)
+				plan_coefficient = 1.1;
+				price_coefficient = 1.1;
+			}
+			else
+			{
+				if (price > prev_price)
 				{
 					price_coefficient = 0.9;
 					plan_coefficient = 1;
 				}
 				else
 				{
-					price_coefficient = 1;
 					plan_coefficient = 0.9;
+					price_coefficient = 1;
 				}
 			}
-			else
-				plan_coefficient = sold/plan;
 		}
-		plan = (sold > 0)?plan_coefficient * sold: plan;
+		plan =	sold > 0? plan_coefficient * sold: plan;
+		//plan = sold > 0? plan_coefficient * sold: plan;
+/*		plan = ceil(plan/labor_productivity) * labor_productivity > floor(plan + 0.5)? floor(plan/labor_productivity) * labor_productivity: ceil(plan/labor_productivity) * labor_productivity;//*/
+/*		if (sold >= 0.8 * production)
+			plan_coefficient = 1.3;
+		if (sold >= 0.5 * production && sold < 0.8 * production)
+			plan_coefficient = 1.2;
+		if (sold >= 0.3 * production && sold < 0.5 * production)
+			plan_coefficient = 1.1;
+		if (sold >= 0.1 * production && sold < 0.3 * production)
+			plan_coefficient = 1;
+		if (sold < 0.1 * production)
+			plan_coefficient = 0.9;
+		if (sold >= production)
+			price_coefficient = 1.1;
+		else
+		{
+			if (prev_price < price)
+				price_coefficient = 0.9;
+			else
+				price_coefficient = 1;
+		}
+		plan = sold > 0? plan_coefficient * sold: plan;//*/
+
 		prev_price = price;
 		price = price_coefficient * price;
 	}
@@ -217,7 +271,7 @@ void firm::learn()
 	sales = 0;
 
 
-/*	if (plan - storage > 0)
+	if (plan - storage > 0)
 	{
 		plan -= storage;
 	}
@@ -258,6 +312,8 @@ float firm::get(string parameter)
 		return plan;
 	if (parameter == "money")
 		return money;
+	if (parameter == "storage")
+		return storage;
 }
 
 float firm::get_salary()

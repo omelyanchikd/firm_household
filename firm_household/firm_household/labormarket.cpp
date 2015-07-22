@@ -30,6 +30,7 @@ void labormarket::match()
 {
 	for (int i = 0; i < households.size(); i++)
 	{
+		households[i]->activate();
 		if (probabilities.empty())
 			break;
 		firm *employer = households[i]->find_work(probabilities);

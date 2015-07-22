@@ -4,7 +4,7 @@
 
 household::household(void)
 {
-	money = 1000;
+	money = 100;
 	employed = false;
 	employer = NULL;
 	salary = 0;
@@ -32,19 +32,25 @@ void household::decide()
 		consumption_budget = money - 0.8 * (money - 0.6 * salary);
 	else
 		consumption_budget = money;//*/
-	if (employed)
+	money += salary;
+	if (employer != NULL)
 		consumption_budget = 0.8 * salary;
 	else
-		consumption_budget = 1;
-	//consumption_budget = 20;
+		consumption_budget = money > 0.001? 0.01 * money: 0;
+	//consumption_budget = 20;//*/
 	consumption = 0;
 	consumption_capacity = 2;
 }
 
-firm* household::find_work(map<firm*, float> probabilities)
+void household::activate()
 {
 	if (employer != NULL)
 		salary = employer->get_salary();
+}
+
+
+firm* household::find_work(map<firm*, float> probabilities)
+{
 	firm* offer = get_random<firm*>(probabilities);
 	if (offer->get_salary() > salary && offer->get_needed_workers() > 0)
 	{
@@ -76,6 +82,7 @@ firm* household::buy(float &capacity, float &consumption, float &budget, map<fir
 	float need = capacity - consumption;
 	if (need <= quantity && budget >= need * price)
 	{
+		money -= need* price;
 		budget -= need * price;
 		seller->sell(need);
 		consumption += need - consumption;
@@ -83,12 +90,14 @@ firm* household::buy(float &capacity, float &consumption, float &budget, map<fir
 	else
 		if (need > quantity && budget >= quantity * price)
 		{
+			money -= quantity * price;
 			budget -= quantity * price;
 			seller->sell(quantity);
 			consumption += quantity;
 		}
 		else
 		{
+			money -= budget;
 			consumption += budget/price;
 			seller->sell(budget/price);
 			budget = 0;

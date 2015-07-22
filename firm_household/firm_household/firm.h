@@ -46,6 +46,7 @@ public:
 	void write_log();
 
 	void learn();
+	void learn(float pl, float pr);
 
 	float get(string parameter);
 

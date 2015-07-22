@@ -20,6 +20,8 @@ public:
 
 	void decide();
 
+	void activate();
+
 	firm* find_work(map<firm*, float> probabilities);
 
 	firm* buy(map<firm*, float> probabilities);
