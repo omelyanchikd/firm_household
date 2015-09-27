@@ -264,12 +264,12 @@ private: System::Windows::Forms::Label^  label14;
 			// 
 			this->parameters->CheckOnClick = true;
 			this->parameters->FormattingEnabled = true;
-			this->parameters->Items->AddRange(gcnew cli::array< System::Object^  >(15) {L"price", L"salary", L"plan", L"storage", L"workers", 
+			this->parameters->Items->AddRange(gcnew cli::array< System::Object^  >(17) {L"price", L"salary", L"plan", L"storage", L"workers", 
 				L"labor_capacity", L"capital_capacity", L"raw_capacity", L"capital_investments", L"raw_investments", L"sales", L"sold", L"profit", 
-				L"money", L"production"});
+				L"money", L"margin", L"share", L"production"});
 			this->parameters->Location = System::Drawing::Point(658, 50);
 			this->parameters->Name = L"parameters";
-			this->parameters->Size = System::Drawing::Size(141, 229);
+			this->parameters->Size = System::Drawing::Size(141, 259);
 			this->parameters->TabIndex = 1;
 			this->parameters->TabStop = false;
 			// 
@@ -296,9 +296,9 @@ private: System::Windows::Forms::Label^  label14;
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(524, 285);
+			this->button1->Location = System::Drawing::Point(524, 311);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(275, 68);
+			this->button1->Size = System::Drawing::Size(269, 35);
 			this->button1->TabIndex = 0;
 			this->button1->Text = L"Draw";
 			this->button1->UseVisualStyleBackColor = true;
@@ -345,7 +345,7 @@ private: System::Windows::Forms::Label^  label14;
 			this->number_household->Name = L"number_household";
 			this->number_household->Size = System::Drawing::Size(143, 20);
 			this->number_household->TabIndex = 36;
-			this->number_household->Text = L"10";
+			this->number_household->Text = L"200";
 			// 
 			// labor_productivity
 			// 
@@ -370,7 +370,7 @@ private: System::Windows::Forms::Label^  label14;
 			this->number_firm->Name = L"number_firm";
 			this->number_firm->Size = System::Drawing::Size(143, 20);
 			this->number_firm->TabIndex = 28;
-			this->number_firm->Text = L"1";
+			this->number_firm->Text = L"5";
 			// 
 			// label11
 			// 

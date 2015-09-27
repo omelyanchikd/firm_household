@@ -1,12 +1,12 @@
 #pragma once
 
-
-
 #include "firm.h"
 #include "household.h"
 
 #include "market.h"
 #include "labormarket.h"
+
+#include "macro.h"
 
 #include <vector>
 #include <map>
@@ -35,6 +35,10 @@ private:
 
 	float money;
 
+	macro *stats;
+
+	firm *foreign;
+
 	vector<firm*> firms;
 	vector<household*> households;
 
@@ -56,6 +60,7 @@ private:
 	void learn();
 	void learn(float pl, float pr);
 
+	void get_info();
 	void get_money();
 	//void learn(string type);
 };

@@ -34,7 +34,7 @@ void household::decide()
 		consumption_budget = money;//*/
 	money += salary;
 	if (employer != NULL)
-		consumption_budget = 0.8 * salary;
+		consumption_budget = 0.9 * salary;
 	else
 		consumption_budget = money > 0.001? 0.01 * money: 0;
 	//consumption_budget = 20;//*/

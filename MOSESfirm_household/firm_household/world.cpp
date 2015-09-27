@@ -24,14 +24,22 @@ world::world(int number_firm, int number_household, float money_household)
 	firms.clear();
 	households.clear();
 	for (int i = 0; i < number_firm; i++)
+	{
 		firms.push_back(new firm());
+		firms[i]->set("share", 1.0/number_firm);
+	}
 	for (int i = 0; i < number_household; i++)
 		households.push_back(new household(money_household));
 	labor_market = new labormarket(firms, households);	
-	good_market = new market("good_market", firms, households);
+	vector<firm*> good_firms = firms;
+	foreign = new firm("foreign");
+	foreign->set("price", 6);
+	good_firms.push_back(foreign);	
+	good_market = new market("good_market", good_firms, households);
 	ofstream fout;
 	fout.open("taxes.txt", ios::out | ios::trunc);	
-	fout.close();		
+	fout.close();	
+	stats = new macro(0, 0, 0, 0, 0, 0);
 }
 
 void world::init(float money, float labor_productivity, float salary_coefficient)
@@ -46,14 +54,15 @@ void world::init(float money, float labor_productivity, float salary_coefficient
 
 void world::step()
 {
-	learn();
 	get_money();
 	labor_market->activate();
 	labor_market->match();	
 	good_market->activate();
 	good_market->match();
 	get_profits();
+	get_info();
 	write_log();
+	learn();
 //	taxation();
 }
 
@@ -101,6 +110,29 @@ void world::get_money()
 		money += households[j]->get("money");
 }
 
+void world::get_info()
+{
+	stats->salary = 0;
+	stats->workers = 0;
+	stats->price = 0;
+	stats->sales = 0;
+	stats->profits = 0;
+	stats->sold = 0;
+	for (int i = 0; i < firms.size(); i++)
+	{
+		stats->salary += firms[i]->get("salary") * firms[i]->get("workers");
+		stats->workers += firms[i]->get("workers");
+		stats->price += firms[i]->get("price") * firms[i]->get("sold");
+		stats->sold += firms[i]->get("sold");
+		stats->sales += firms[i]->get("sales");
+		stats->profits += firms[i]->get("profit");			
+	}
+	//stats->price += foreign->get("price") * foreign->get("sold");
+	stats->sold += foreign->get("sold");
+	stats->price /= stats->sold;
+	stats->salary /= stats->workers;
+	stats->sales = foreign->get("sales") + stats->sales;	
+}
 
 void world::write_log()
 {
@@ -111,7 +143,7 @@ void world::write_log()
 void world::learn()
 {
 	for (int i = 0; i < firms.size(); i++)
-		firms[i]->learn();
+		firms[i]->learn(stats);
 }
 
 void world::learn(float pl, float pr)
